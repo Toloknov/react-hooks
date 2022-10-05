@@ -13,7 +13,6 @@ const PrevStateExample = () => {
             prevState === "false" ? "true" : "false"
         );
     };
-    console.log(prevState.current);
     return (
         <CardWrapper>
             <SmallTitle>Предыдущий</SmallTitle>

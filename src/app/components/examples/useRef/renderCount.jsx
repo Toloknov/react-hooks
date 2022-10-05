@@ -14,7 +14,6 @@ const RenderCountExample = () => {
     const handleToggle = () => {
         setToggleClick(!toggleClick);
     };
-    console.log(toggleClick);
     return (
         <CardWrapper>
             <SmallTitle>Подсчет количества рендеров</SmallTitle>
