@@ -24,12 +24,14 @@ ChildrenExercise.propTypes = {
 };
 const Envelope = ({ children }) => {
     return React.Children.map(children, (child, index) => {
-        const config = { ...child, index: index + 1 };
+        const config = { ...child.props, index: index + 1 };
         return React.cloneElement(child, config);
     });
 };
-const Component = () => {
-    return <div>Компонент списка</div>;
+const Component = ({ index }) => {
+    return <div>{index}) Компонент списка</div>;
 };
-
+Component.propTypes = {
+    index: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
+};
 export default ChildrenExercise;

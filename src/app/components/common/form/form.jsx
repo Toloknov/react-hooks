@@ -1,26 +1,37 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { validator } from "../../../utils/validator";
 import PropTypes from "prop-types";
 const FormComponent = ({ children, validatorConfig, onSubmit }) => {
     const [data, setData] = useState({});
     const [errors, setErrors] = useState({});
-    const handleChange = (target) => {
+    const handleChange = useCallback((target) => {
         setData((prevState) => ({
             ...prevState,
             [target.name]: target.value
         }));
-    };
+    }, []);
     useEffect(() => {
         if (Object.keys(data).length > 0) {
-            validate();
+            validate(data);
         }
     }, [data]);
+    const handelKeyDown = useCallback((event) => {
+        if (event.keyCode === 13) {
+            event.preventDefault();
+            const form = event.target.form;
+            const indexField = Array.prototype.indexOf.call(form, event.target);
+            form.elements[indexField + 1].focus();
+        }
+    }, []);
     const isValid = Object.keys(errors).length === 0;
-    const validate = () => {
-        const errors = validator(data, validatorConfig);
-        setErrors(errors);
-        return Object.keys(errors).length === 0;
-    };
+    const validate = useCallback(
+        (data) => {
+            const errors = validator(data, validatorConfig);
+            setErrors(errors);
+            return Object.keys(errors).length === 0;
+        },
+        [validatorConfig, setErrors]
+    );
     const handleSubmit = (e) => {
         e.preventDefault();
         const isValid = validate();
@@ -33,18 +44,20 @@ const FormComponent = ({ children, validatorConfig, onSubmit }) => {
         const childType = typeof child.type;
         let config = {};
 
-        if (childType === "function") {
+        if (childType === "object") {
             if (!child.props.name) {
                 throw new Error(
                     "Name property is required for field component",
                     child
                 );
             }
+
             config = {
                 ...child.props,
-                onchange: handleChange,
+                onChange: handleChange,
                 value: data[child.props.name] || "",
-                error: errors[child.props.name]
+                error: errors[child.props.name],
+                onKeyDown: handelKeyDown
             };
         }
         if (childType === "string") {

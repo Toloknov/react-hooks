@@ -68,15 +68,12 @@ const EditUserPage = () => {
             <div className="row">
                 <div className="col-md-6 offset-md-3 shadow p-4">
                     {!isLoading && Object.keys(professions).length > 0 ? (
-                        <FormComponent onSubmit={handleSubmit} validatorConfig={validatorConfig}>
-                            <TextField
-                                label="Имя"
-                                name="name"
-                            />
-                            <TextField
-                                label="Электронная почта"
-                                name="email"
-                            />
+                        <FormComponent
+                            onSubmit={handleSubmit}
+                            validatorConfig={validatorConfig}
+                        >
+                            <TextField autoFocus label="Имя" name="name" />
+                            <TextField label="Электронная почта" name="email" />
                             <SelectField
                                 label="Выбери свою профессию"
                                 defaultOption="Choose..."
